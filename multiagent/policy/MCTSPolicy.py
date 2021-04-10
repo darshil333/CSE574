@@ -5,10 +5,9 @@ from utils.node import Node
 from multiagent.algorithm.ucb import ucb
 import gym
 import itertools
-from multiagent.multi_discrete import MultiDiscrete
 
 
-playouts = 4000
+playouts = 5000
 max_depth = 50
 
 
@@ -23,11 +22,11 @@ class MCTSPolicy(Policy):
         super(MCTSPolicy, self).__init__()
         self.env = env
 
-    def action(self, env, root, best_reward):
+    def action(self, env, root, sample_action):
         best_actions = []
+        best_reward = float("-inf")
         for _ in range(playouts):
             state = copy(env)
-            (print(s) for s in state.action_space)
             sum_reward = 0
             node = root
             terminal = False
@@ -42,7 +41,7 @@ class MCTSPolicy(Policy):
                 else:
                     node = max(node.children, key=ucb)
                 _, reward, terminal, _ = state.step(node.action)
-                sum_reward += reward
+                sum_reward += reward[0]
                 actions.append(node.action)
 
             # expansion
@@ -53,16 +52,15 @@ class MCTSPolicy(Policy):
 
             # playout
             while not terminal:
-                action = MultiDiscrete.sample(self)
-                _, reward, terminal, _ = state.step(action)
-                sum_reward += reward
-                actions.append(action)
-
+                _, reward, terminal, _ = state.step(sample_action)
+                sum_reward += reward[0]
+                actions.append(sample_action)
                 if len(actions) > max_depth:
                     sum_reward -= 100
                     break
 
             # remember best
+            # print(best_reward, sum_reward)
             if best_reward < sum_reward:
                 best_reward = sum_reward
                 best_actions = actions

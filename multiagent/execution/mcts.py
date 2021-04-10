@@ -1,7 +1,6 @@
 import sys
 from time import time
 
-import numpy as np
 from multiagent.policy.MCTSPolicy import MCTSPolicy
 from utils.node import Node
 
@@ -17,7 +16,7 @@ def moving_average(v, n):
     return ret
 
 
-def print_stats(self, loop, score, avg_time):
+def print_stats(loop, score, avg_time):
     sys.stdout.write('\r%3d   score:%10.3f   avg_time:%4.1f s' %
                         (loop, score, avg_time))
     sys.stdout.flush()
@@ -33,28 +32,28 @@ def mcts_execution(env):
         env.reset()
         root = Node(None, None)
 
-        actions = []
-        best_reward = float("-inf")
-        for _, policy in enumerate(policies):
-            actions = (policy.action
-                (env, root, best_reward))
+        sample_actions = env.sample_actions()
+        best_actions = []
+        for i, policy in enumerate(policies):
+            best_actions = (policy.action
+                (env, root, [sample_actions[i]]))
 
-        next_state, reward, done, info=env.step(actions)
+        # next_state, reward, done, info=env.step(best_actions)
 
         sum_reward=0
-        # for action in best_actions:
-        #     _, reward, terminal, _ = env.step(action)
-        #     sum_reward += reward
-        #     if terminal:
-        #         break
+        for action in best_actions:
+            _, reward, terminal, _ = env.step(action)
+            sum_reward += reward[0]
+            if terminal:
+                break
 
         env.render()
 
-        # display rewards
-        for agent in env.world.agents:
-            print(agent.name + " reward: %0.3f" % env._get_reward(agent))
-
+        # # display rewards
+        # for agent in env.world.agents:
+        #     print(agent.name + " reward: %0.3f" % env._get_reward(agent))
         best_rewards.append(sum_reward)
+        print(best_rewards)  
         score=max(moving_average(best_rewards, 100))
         avg_time=(time()-start_time)/(loop+1)
         print_stats(loop+1, score, avg_time)
