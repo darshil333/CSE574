@@ -22,9 +22,10 @@ if __name__ == '__main__':
     world = scenario.make_world()
     # create multiagent environment
     env = MultiAgentEnv(world, scenario.reset_world, scenario.reward, scenario.observation, info_callback=None, shared_viewer=False)
+    test_env = MultiAgentEnv(world, scenario.reset_world, scenario.reward, scenario.observation, info_callback=None, shared_viewer=False)
 
 
-    mc_prediction_execution(env)
+    # mc_prediction_execution(env)
     # mcts_execution(env)
-    # q_learning_execution(env)
+    q_learning_execution(env, test_env)
     # random_policy_execution(env)

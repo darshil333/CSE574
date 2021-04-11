@@ -10,8 +10,8 @@ class EpsilonGreedyPolicy(Policy):
         self.env = env
 
     def action(self, obs, q_vals, epsilon):
-        if random.random() < epsilon:
+        if random.random() < epsilon: #explore
             action = np.random.choice(len(q_vals[obs]))  # randomly select action from state
-        else:
+        else: #exploit
             action = np.argmax(q_vals[obs])  # greedily select action from state
         return action
