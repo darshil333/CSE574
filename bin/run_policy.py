@@ -6,8 +6,9 @@ sys.path.insert(1, os.path.join(sys.path[0], '..'))
 import multiagent.scenarios as scenarios
 from multiagent.environment import MultiAgentEnv
 from multiagent.execution.mcts import mcts_execution
+from multiagent.execution.mc_prediction import mc_prediction_execution
 from multiagent.execution.q_learning import q_learning_execution
-from multiagent.execution.random_policy import random_policy_execution
+from multiagent.execution.random_policy_execution import random_policy_execution
 
 if __name__ == '__main__':
     # parse arguments
@@ -23,6 +24,7 @@ if __name__ == '__main__':
     env = MultiAgentEnv(world, scenario.reset_world, scenario.reward, scenario.observation, info_callback=None, shared_viewer=False)
 
 
-    mcts_execution(env)
+    mc_prediction_execution(env)
+    # mcts_execution(env)
     # q_learning_execution(env)
     # random_policy_execution(env)
