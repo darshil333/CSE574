@@ -97,13 +97,13 @@ class MultiAgentEnv(gym.Env):
         # advance world state
         self.world.step()
         # record observation for each agent
-        for agent in self.agents:
+        for i, agent in enumerate(self.agents):
             obs_n.append(self._get_obs(agent))
-            reward_n.append(self._get_reward(agent))
+            reward_n.append(self._get_reward(agent, i))
             done_n.append(self._get_done(agent))
 
             info_n['n'].append(self._get_info(agent))
-
+        
         # all agents get total reward in cooperative case
         reward = np.sum(reward_n)
         if self.shared_reward:
@@ -143,10 +143,10 @@ class MultiAgentEnv(gym.Env):
         return self.done_callback(agent, self.world)
 
     # get reward for a particular agent
-    def _get_reward(self, agent):
+    def _get_reward(self, agent, agent_index):
         if self.reward_callback is None:
             return 0.0
-        return self.reward_callback(agent, self.world)
+        return self.reward_callback(agent, self.world, agent_index)
 
     # set env action for a particular agent
     def _set_action(self, action, agent, action_space, time=None):

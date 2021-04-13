@@ -51,6 +51,7 @@ def q_learning_execution(env, test_env):
             action = []
             for agent, policy in enumerate(policies):
                 action.append(policy.action(tuple(current_state[agent]), q_vals, epsilon))
+            
             # run action
             # print('Actions for each agent in step {} -- {}'.format(step, action))
             next_state, reward, done, info = env.step(action)
