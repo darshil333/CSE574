@@ -10,7 +10,7 @@ class Scenario(BaseScenario):
         world.dim_c = 0
         num_agents = 3
         num_landmarks = 3
-        world.collaborative = False
+        world.collaborative = True
         # add agents
         world.agents = [Agent() for i in range(num_agents)]
         for i, agent in enumerate(world.agents):
@@ -69,13 +69,21 @@ class Scenario(BaseScenario):
         dist_min = agent1.size + agent2.size
         return True if dist < dist_min else False
 
-    def reward(self, agent, world):
+    def reward(self, agent, world, agent_index):
         # Agents are rewarded based on minimum agent distance to each landmark, penalized for collisions
+
+        # rew = 0
+        # for l in world.landmarks:
+        #     dists = [np.sqrt(np.sum(np.square(a.state.p_pos - l.state.p_pos)))
+        #              for a in world.agents]
+        #     rew -= min(dists)
+        
         rew = 0
+        dists = []
         for l in world.landmarks:
-            dists = [np.sqrt(np.sum(np.square(a.state.p_pos - l.state.p_pos)))
-                     for a in world.agents]
+            dists.append(np.sqrt(np.sum(np.square(world.agents[agent_index].state.p_pos - l.state.p_pos))))
             rew -= min(dists)
+
         if agent.collide:
             for a in world.agents:
                 if self.is_collision(a, agent):
