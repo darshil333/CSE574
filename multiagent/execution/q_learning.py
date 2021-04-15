@@ -4,6 +4,9 @@ import numpy as np
 from multiagent.policy.epsilon_greedy import EpsilonGreedyPolicy
 from multiagent.algorithm.q_learning_update import q_learning_update
 
+import matplotlib.pyplot as plt
+import numpy as np
+
 
 def q_learning_execution(env, test_env):
     # q learning initializations
@@ -16,22 +19,7 @@ def q_learning_execution(env, test_env):
     epsilon = 1
     max_epsilon = 1
     min_epsilon = 0.01
-    explortion_decay = 0.01
-
-    def greedy_eval():
-        # evaluate greedy policy w.r.t current q_vals
-        prev_state = test_env.reset()
-        ret = 0.
-        done = False
-        H = 100
-        for i in range(H):
-            action = []
-            for agent in range(env.n):
-                action.append(np.argmax(q_vals[tuple(prev_state[agent])]))
-            state, reward, done, info = test_env.step(action)
-            ret += reward[0]
-            prev_state = state
-        return ret / H
+    explortion_decay = 0.001
 
     # create policies for each agent
     # env.n = number of agents
@@ -60,7 +48,6 @@ def q_learning_execution(env, test_env):
             # update q value
             for agent in range(env.n):
                 q_learning_update(gamma, alpha, q_vals, tuple(current_state[agent]), action, tuple(next_state[agent]), reward)
-                # print("Reward of {} -- {}".format(agent, reward[agent]))
                 current_episode_reward[agent] += reward[agent]
             
             current_state = next_state
@@ -78,14 +65,20 @@ def q_learning_execution(env, test_env):
         # render all agent views
         env.render()
 
-        # # evaluation
-        # if episode % 1000 == 0:
-        #     print("Episode %i # Average reward: %.2f" % (episode, greedy_eval()))
-
     # Average reward per thousand episodes
-    reward_per_thousand_episodes = np.split(np.array(all_episode_reward), num_episodes/1000)
-    count = 1000
+    reward_per_thousand_episodes = np.split(np.array(all_episode_reward), num_episodes/100)
+    rewards_to_plot = np.zeros((100,env.n))
+    count = 100
     print("----Average reward per thousand episodes---\n")
-    for r in reward_per_thousand_episodes:
-        print(count, ': ', str(sum(r/1000)))
-        count += 1000
+    for i,r in enumerate(reward_per_thousand_episodes):
+        print(count, ': ', str(sum(r/100)))
+        rewards_to_plot[i] = (sum(r/100))
+        count += 100
+
+    fig, ax = plt.subplots()  # Create a figure containing a single axes.
+    ax.plot(range(100), rewards_to_plot, label=['Agent1', 'Agent2', 'Agent3'])  # Plot some data on the axes.
+    ax.set_xlabel('Episodes')  # Add an x-label to the axes.
+    ax.set_ylabel('Reward')  # Add a y-label to the axes.
+    ax.set_title("Cooperative Agents")  # Add a title to the axes.
+    ax.legend()  # Add a legend.
+    plt.show()

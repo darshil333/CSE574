@@ -82,7 +82,7 @@ class Scenario(BaseScenario):
         dists = []
         for l in world.landmarks:
             dists.append(np.sqrt(np.sum(np.square(world.agents[agent_index].state.p_pos - l.state.p_pos))))
-            rew -= min(dists)
+        rew -= min(dists)
 
         if agent.collide:
             for a in world.agents:
