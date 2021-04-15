@@ -7,7 +7,7 @@ class Scenario(BaseScenario):
         world = World()
         # set any world properties first
         world.dim_c = 2
-        num_agents = 2
+        num_agents = 3
         num_adversaries = 1
         num_landmarks = 2
         # add agents
@@ -55,7 +55,7 @@ class Scenario(BaseScenario):
             landmark.state.p_pos = np.random.uniform(-1, +1, world.dim_p)
             landmark.state.p_vel = np.zeros(world.dim_p)
 
-    def reward(self, agent, world):
+    def reward(self, agent, world, agent_index):
         # Agents are rewarded based on minimum agent distance to each landmark
         return self.adversary_reward(agent, world) if agent.adversary else self.agent_reward(agent, world)
 
