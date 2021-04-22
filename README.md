@@ -1,18 +1,23 @@
-# Multi-Agent Particle Environment
-
-A simple multi-agent particle world with a continuous observation and discrete action space, along with some basic simulated physics.
-Used in the paper [Multi-Agent Actor-Critic for Mixed Cooperative-Competitive Environments](https://arxiv.org/pdf/1706.02275.pdf).
+# Solving a Multi-Agent Grid Environment in OpenAI Gym 
 
 ## Getting started:
 
 - To install, `cd` into the root directory and type `pip install -e .`
 
 - To run a policy for a scenario (see others in ./scenarios/):
-`bin/run_policy.py --scenario simple_spread.py`
+`bin/run_policy.py --scenario simple_spread.py --algorithm [q_learning/mcts/td3]`
 
-- Known dependencies: Python (3.5.4), OpenAI gym (0.10.5), numpy (1.14.5)
+- Known dependencies: Python (3.8.5), OpenAI gym (0.18). Others listed in requirements.txt
 
 - To use the environments, look at the code for importing them in `make_env.py`.
+
+## Environment:
+
+Derived from [multiagent-particle-envs](https://github.com/openai/multiagent-particle-envs)
+
+A simple multi-agent particle world with a continuous observation and discrete action space, along with some basic simulated physics.
+Used in the paper [Multi-Agent Actor-Critic for Mixed Cooperative-Competitive Environments](https://arxiv.org/pdf/1706.02275.pdf).
+
 
 ## Code structure
 

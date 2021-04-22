@@ -166,17 +166,10 @@ class MultiAgentEnv(gym.Env):
         return self.done_callback(agent, self.world)
 
     # get reward for a particular agent
-<<<<<<< HEAD
-    def _get_reward(self, agent, i):
-        if self.reward_callback is None:
-            return 0.0
-        return self.reward_callback(agent, self.world, i)
-=======
     def _get_reward(self, agent, agent_index):
         if self.reward_callback is None:
             return 0.0
         return self.reward_callback(agent, self.world, agent_index)
->>>>>>> q-learning-multi
 
     # set env action for a particular agent
     def _set_action(self, action, agent, action_space, time=None):

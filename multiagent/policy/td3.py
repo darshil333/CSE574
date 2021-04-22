@@ -1,4 +1,4 @@
-# Won't work yet. Pls don't use
+''' TD3 for discrete spaces '''
 import torch
 import random
 import copy
