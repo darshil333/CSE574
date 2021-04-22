@@ -5,7 +5,7 @@
 - To install, `cd` into the root directory and type `pip install -e .`
 
 - To run a policy for a scenario (see others in ./scenarios/):
-`bin/run_policy.py --scenario simple_spread.py --algorithm [q_learning/mcts/td3]`
+`bin/run_policy.py --scenario simple_spread.py --algorithm [q_learning/mcts/td3] --agents <agentcount> --landmarks <landmarkcount> --collab [0/1]`
 
 - Known dependencies: Python (3.8.5), OpenAI gym (0.18). Others listed in requirements.txt
 

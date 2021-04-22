@@ -19,12 +19,16 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=None)
     parser.add_argument('-s', '--scenario', default='simple.py', help='Path of the scenario Python script.')
     parser.add_argument('-a', '--algorithm', default='td3', help='Name of the algorithm to run. One of q_learning, td3, mcts')
+    parser.add_argument('--agents', default=3, type=int, help='Number of agents')
+    parser.add_argument('--landmarks', default=3, type=int, help='Number of landmarks')
+    parser.add_argument('--collab', default=1, type=int, help='Toggle for shared rewards')
+    
     args = parser.parse_args()
 
     # load scenario from script
     scenario = scenarios.load(args.scenario).Scenario()
     # create world
-    world = scenario.make_world()
+    world = scenario.make_world(agents=args.agents, landmarks=args.landmarks, collab=args.collab)
     # create multiagent environment
 
     # fully observable env
