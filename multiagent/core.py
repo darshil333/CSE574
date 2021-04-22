@@ -143,6 +143,22 @@ class World(object):
         # update agent state
         for agent in self.agents:
             self.update_agent_state(agent)
+    
+    # update state of the world
+    def single_step(self, agent):
+        # set actions for scripted agents
+        agent.action = agent.action_callback(agent, self)
+        # gather forces applied to entities
+        p_force = [None] * len(self.entities)
+        # apply agent physical controls
+        p_force = self.apply_action_force_single(p_force, agent)
+        # apply environment forces
+        p_force = self.apply_environment_force(p_force)
+        # integrate physical state
+        self.integrate_state(p_force)
+        # update agent state
+        for agent in self.agents:
+            self.update_agent_state(agent)
 
     # gather agent action forces
 
@@ -153,6 +169,15 @@ class World(object):
                 noise = np.random.randn(
                     *agent.action.u.shape) * agent.u_noise if agent.u_noise else 0.0
                 p_force[i] = agent.action.u + noise
+        return p_force
+    
+    def apply_action_force_single(self, p_force, agent):
+            # set applied forces
+        # for i, agent in enumerate(self.agents):
+            # if agent.movable:
+            #     noise = np.random.randn(
+            #         *agent.action.u.shape) * agent.u_noise if agent.u_noise else 0.0
+            #     p_force[i] = agent.action.u + noise
         return p_force
 
     # gather physical forces acting on entities
@@ -185,8 +210,7 @@ class World(object):
                 speed = np.sqrt(
                     np.square(entity.state.p_vel[0]) + np.square(entity.state.p_vel[1]))
                 if speed > entity.max_speed:
-                    entity.state.p_vel = entity.state.p_vel / np.sqrt(np.square(entity.state.p_vel[0]) +
-                                                                      np.square(entity.state.p_vel[1])) * entity.max_speed
+                    entity.state.p_vel = entity.state.p_vel / np.sqrt(np.square(entity.state.p_vel[0]) +np.square(entity.state.p_vel[1])) * entity.max_speed
             entity.state.p_pos += entity.state.p_vel * self.dt
 
     def update_agent_state(self, agent):
