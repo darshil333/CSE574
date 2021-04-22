@@ -4,7 +4,8 @@ import os
 import sys
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 import multiagent.scenarios as scenarios
-from multiagent.environment import MultiAgentEnv, PartialObsMAE
+from multiagent.environment import MultiAgentEnv
+from multiagent.execution.mcts import mcts_execution
 from multiagent.execution.q_learning import q_learning_execution
 from multiagent.execution.random_policy import random_policy_execution
 from multiagent.policy.td3 import run
@@ -76,4 +77,6 @@ if __name__ == '__main__':
     if args.algorithm == 'td3':
         print("Running TD3")
         run_td3(env)
-    
+    if args.algorithm == 'mcts':
+        mcts_execution(env)
+
